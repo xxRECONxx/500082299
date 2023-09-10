@@ -8,20 +8,22 @@ const port = 8008;
 app.use(express.json());
 
 app.get('/numbers', async (req, res) => {
-  const urls = req.query.url;
+  let urls = req.query.url;
+  let urlArray=[];
+  if(typeof urls === 'string'){
+urlArray.push(urls);
+urls=urlArray;
+  }
   if (!urls) {
-    console.log("if ");
     return res.status(400).json({ error: 'Invalid URL parameter' });
   }
   else if(!Array.isArray(urls)){
-    console.log("else if");
     return res.status(400).json({ error: 'Invalid URL parameter' });
   }
 
   const mergedNumbers = [];
 
   async function numbersFetchandMerge(url) {
-    console.log(url);
     try {
       const response = await axios.get(url, { timeout: 500 });
 
